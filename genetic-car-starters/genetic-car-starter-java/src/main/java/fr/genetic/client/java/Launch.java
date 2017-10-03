@@ -55,17 +55,22 @@ public class Launch implements CommandLineRunner {
     }
 
     protected void doMyAlgo() {
-        List<CarView> cars = IntStream.range(0, 20)
-                .mapToObj(i -> Car.random().toCarView())
-                .collect(Collectors.toList());
-
+        List<CarView> cars = getRandomCars();
         List<CarScoreView> carScores = evaluate(cars);
-
-        CarScoreView champion = carScores.stream()
-                .max((carScore1, carScore2) -> Float.compare(carScore1.score, carScore2.score))
-                .get();
-
+        CarScoreView champion = getChampion(carScores);
         LOGGER.info("Mon champion est {}", champion);
+    }
+
+    private CarScoreView getChampion(List<CarScoreView> carScores) {
+        return carScores.stream()
+                    .max((carScore1, carScore2) -> Float.compare(carScore1.score, carScore2.score))
+                    .get();
+    }
+
+    private List<CarView> getRandomCars() {
+        return IntStream.range(0, 20)
+                        .mapToObj(i -> Car.random().toCarView())
+                        .collect(Collectors.toList());
     }
 
 }
